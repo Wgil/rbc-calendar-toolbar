@@ -1,7 +1,16 @@
 {
-  "extends": "react-app",
-  "plugins": ["prettier"],
+  "parser": "babel-eslint",
+  "extends": ["standard", "standard-react"],
+  "env": {
+    "es6": true
+  },
+  "plugins": ["react"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "rules": {
-    "prettier/prettier": "error"
+    "space-before-function-paren": 0,
+    "react/jsx-boolean-value": 0,
+    "jsx-quotes": 0
   }
 }

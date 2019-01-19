@@ -1,41 +1,62 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import BigCalendar from "react-big-calendar";
-import Toolbar from "./Toolbar";
-import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { subDays, addDays, getDate, startOfWeek } from 'date-fns'
+import { VISIBLE_DAYS } from './utils/constants'
+import { visibleDaysInterval } from './utils/fns'
+import './styles/Toolbar.less'
 
-// Setup the localizer by providing the moment (or globalize) Object
-// to the correct localizer.
-const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
+const WEEK_DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
-class Calendar extends React.Component {
+export default class Toolbar extends Component {
+  static propTypes = {
+    visibleDays: PropTypes.number
+  }
+
+  static defaultProps = {
+    visibleDays: VISIBLE_DAYS
+  }
+
   state = {
-    date: new Date()
-  };
+    interval: visibleDaysInterval(
+      startOfWeek(this.props.date),
+      this.props.visibleDays
+    )
+  }
 
-  handleNavigate = date => this.setState({ date });
+  handleNavigate = date => {
+    const { onNavigate, visibleDays } = this.props
+    const interval = visibleDaysInterval(date, visibleDays)
+    this.setState({ interval }, () => onNavigate(date))
+  }
 
   render() {
-    const { date } = this.state;
+    const { date } = this.props
+    const { interval } = this.state
+    // debugger;
     return (
-      <div style={{ height: "100vh" }}>
-        <BigCalendar
-          date={date}
-          onNavigate={(date, view, action) => {
-            this.handleNavigate(action);
-          }}
-          localizer={localizer}
-          events={[
-            { title: "Hello World", start: new Date(), end: new Date() }
-          ]}
-          components={{
-            toolbar: props => <Toolbar {...props} />
-          }}
-        />
+      <div className="rbc-calendar-toolbar">
+        <h3> {date.toDateString()} </h3>
+        <button onClick={_ => this.handleNavigate(subDays(date, 7))}>
+          Last week
+        </button>
+        <button onClick={_ => this.handleNavigate(new Date())}>Today</button>
+        <button onClick={_ => this.handleNavigate(addDays(date, 7))}>
+          Next week
+        </button>
+        <div className="grid">
+          {WEEK_DAYS.map((day, idx) => (
+            <span key={idx}>{day}</span>
+          ))}
+          {interval.map(day => (
+            <button
+              key={day.toString()}
+              onClick={_ => this.handleNavigate(day)}
+            >
+              {getDate(day)}
+            </button>
+          ))}
+        </div>
       </div>
-    );
+    )
   }
 }
-
-ReactDOM.render(<Calendar />, document.getElementById("root"));
