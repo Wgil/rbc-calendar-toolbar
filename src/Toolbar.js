@@ -32,10 +32,10 @@ export default class Toolbar extends Component {
   render() {
     const { date } = this.props
     const { interval } = this.state
-    // debugger;
+
     return (
       <div className="rbc-calendar-toolbar">
-        <h3> {date.toDateString()} </h3>
+        <h3>{date.toDateString()}</h3>
         <button onClick={_ => this.handleNavigate(subDays(date, 7))}>
           Last week
         </button>

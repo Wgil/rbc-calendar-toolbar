@@ -1,6 +1,5 @@
 import React from 'react'
 import BigCalendar from 'react-big-calendar'
-import Toolbar from 'rbc-calendar-toolbar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
@@ -17,6 +16,7 @@ export default class App extends React.Component {
 
   render() {
     const { date } = this.state
+
     return (
       <div style={{ height: '100vh' }}>
         <BigCalendar
@@ -29,7 +29,8 @@ export default class App extends React.Component {
             { title: 'Hello World', start: new Date(), end: new Date() }
           ]}
           components={{
-            toolbar: props => <Toolbar {...props} />
+            toolbar: props =>
+              React.cloneElement(this.props.story(), { ...props })
           }}
         />
       </div>
