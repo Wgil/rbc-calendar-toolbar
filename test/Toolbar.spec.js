@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Toolbar from 'rbc-calendar-toolbar'
+import Toolbar from '../src/Toolbar'
 
 describe('`Toolbar`', () => {
   it('is defined', () => {
