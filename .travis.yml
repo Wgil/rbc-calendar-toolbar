@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - 8
+  - 9
+deploy:
+  provider: pages
+  script: npm run predeploy
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: './storybook-static'
+  on:
+    branch: master
